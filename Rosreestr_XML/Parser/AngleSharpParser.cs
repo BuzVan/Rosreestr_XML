@@ -93,9 +93,8 @@ namespace Rosreestr_XML.Parser.AngleSharp
             var docLinks = docOrder.QuerySelectorAll("a");
             if (docLinks.Length > 0)
             {
-                scheme.AllOrderLink = new string[docLinks.Length];
                 for (int i = 0; i < docLinks.Length; i++)
-                    scheme.AllOrderLink[i] = BaseAddr + docLinks[i].GetAttribute("href");
+                    scheme.OrderLink.Add_NotEq(BaseAddr + docLinks[i].GetAttribute("href").Trim());
                 
             }
             else
@@ -108,7 +107,7 @@ namespace Rosreestr_XML.Parser.AngleSharp
         {
             var docLink = docFile.QuerySelector("a");
             if (docLink != null)
-                scheme.FileLink = BaseAddr + docLink.GetAttribute("href");
+                scheme.FileLink.Add_NotEq(BaseAddr + docLink.GetAttribute("href").Trim());
         }
 
         //выделение наименования
@@ -122,29 +121,30 @@ namespace Rosreestr_XML.Parser.AngleSharp
         {
             //первый не пустой ребёнок
             IElement child = docName.Children.FirstOrDefault(x => x.TextContent.Length > 1);
+            //ссылка
+            var docLink = docName.QuerySelector("a");
             //нет ссылки => есть только имя
-            if (docName.QuerySelector("a") == null)
+            if (docLink == null)
             {
                 scheme.Name = docName.TextContent.Trim();
             }
-            //есть только ссылка
-            
-            //нет ссылки в первом => есть Name_Info
+
+            //нет ссылки в первом ребёнке => это Name_Info
             else if (child!=null && child.QuerySelector("a") == null)
             {
                 scheme.NameInfo = RemoveAllTrim(child.TextContent);
-                //во втором ребёнке имя и сслыка.
-                var docLink = docName.QuerySelector("a");
-                if (docLink != null)
-                {
-                    scheme.Name = RemoveAllTrim(docLink.TextContent);
-                }
+                //ссылка это имя
+
+                scheme.Name = RemoveAllTrim(docLink.TextContent);
+                scheme.FileLink.Add_NotEq(BaseAddr + docLink.GetAttribute("href").Trim());
+
 
             }
             //имя находится в сслыке и в тексте после ней
             else
             {
-                scheme.Name = RemoveAllTrim(docName.TextContent);                
+                scheme.Name = RemoveAllTrim(docName.TextContent);
+                scheme.FileLink.Add_NotEq(BaseAddr + docLink.GetAttribute("href").Trim());
             }
         }
 
