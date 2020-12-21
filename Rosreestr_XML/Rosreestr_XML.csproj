@@ -61,6 +61,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ModelView\DataXMLWorker.cs" />
+    <Compile Include="Serialization\TableSerialization.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -71,16 +73,19 @@
     </Compile>
     <Compile Include="Data\GroupXML.cs" />
     <Compile Include="Data\TableXML.cs" />
-    <Compile Include="Data\XML_Scheme.cs" />
+    <Compile Include="Data\SchemeXML.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parser\AngleSharpParser.cs" />
-    <Compile Include="Parser\HtmlLoader.cs" />
-    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="ModelView\ViewGroup.cs" />
+    <Compile Include="ModelView\ViewScheme.cs" />
+    <Compile Include="ModelView\ViewTable.cs" />
+    <Compile Include="Parsing\AngleSharpParser.cs" />
+    <Compile Include="Parsing\HtmlLoader.cs" />
+    <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

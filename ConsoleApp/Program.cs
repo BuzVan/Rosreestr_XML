@@ -1,8 +1,6 @@
 ﻿using Rosreestr_XML.Data;
-using Rosreestr_XML.Parser;
-using Rosreestr_XML.Parser.AngleSharp;
+using Rosreestr_XML.Parsing;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConsoleApp
@@ -24,11 +22,11 @@ namespace ConsoleApp
             {
                 Console.WriteLine(tab);
                 Console.ReadKey();
-                foreach (var gr in tab)
+                foreach (var gr in tab.Groups)
                 {
                     Console.WriteLine(gr);
                     Console.ReadKey();
-                    foreach (var item in gr)
+                    foreach (var item in gr.Schemes)
                     {
                         Console.WriteLine(item);
                         Console.ReadKey();

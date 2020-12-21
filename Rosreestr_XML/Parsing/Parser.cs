@@ -1,14 +1,10 @@
 ﻿using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Rosreestr_XML.Data;
-using Rosreestr_XML.Parser.AngleSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Rosreestr_XML.Parsing.AngleSharp;
 using System.Threading.Tasks;
 
-namespace Rosreestr_XML.Parser
+namespace Rosreestr_XML.Parsing
 {
     public class Parser
     {

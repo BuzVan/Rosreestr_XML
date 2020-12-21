@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rosreestr_XML.Parser
+namespace Rosreestr_XML.Parsing
 {
     class HtmlLoader
     {

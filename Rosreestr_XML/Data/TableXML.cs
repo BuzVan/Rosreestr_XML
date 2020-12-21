@@ -1,76 +1,48 @@
-﻿using System;
+﻿using Rosreestr_XML.Serialization;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Rosreestr_XML.Data
 {
-    public class TableXML : ICollection<GroupXML>
+    [Serializable]
+    public class TableXML
     {
+
         public string NameTable { get; set; }
 
-        public int Count => gropes.Count;
-
-        public bool IsReadOnly => false;
-
-        private List<GroupXML> gropes;
+        public List<GroupXML> Groups { get; set; }
 
         public GroupXML this[int i]
         {
-            get { return gropes[i]; }
-            set { gropes[i] = value; }
+            get { return Groups[i]; }
+            set { Groups[i] = value; }
         }
 
-        public TableXML(string nameTable)
+        public TableXML()
         {
+           
+        }
+
+        public TableXML(string nameTable): this()
+        {
+            Groups = new List<GroupXML>();
             NameTable = nameTable;
-            gropes = new List<GroupXML>();
         }
 
         public TableXML(string nameTable, List<GroupXML> gropes) : this(nameTable)
         {
-            this.gropes = gropes;
-        }
-
-        public void Add(GroupXML item)
-        {
-            gropes.Add(item);
-        }
-
-        public void Clear()
-        {
-            gropes.Clear();
-        }
-
-        public bool Contains(GroupXML item)
-        {
-            return gropes.Contains(item);
-        }
-
-        public void CopyTo(GroupXML[] array, int arrayIndex)
-        {
-            gropes.CopyTo(array, arrayIndex);
-        }
-
-        public bool Remove(GroupXML item)
-        {
-           return gropes.Remove(item);
-        }
-
-        public IEnumerator<GroupXML> GetEnumerator()
-        {
-            return gropes.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return gropes.GetEnumerator();
+            this.Groups = gropes;
         }
         public override string ToString()
         {
-            return string.Format("Table {0}: {1}", NameTable, Count); 
+            return string.Format("Table {0}: {1}", NameTable, Groups.Count); 
         }
+
+
     }
 }

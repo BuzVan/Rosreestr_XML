@@ -9,7 +9,7 @@ using System.IO;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 
-namespace Rosreestr_XML.Parser.AngleSharp
+namespace Rosreestr_XML.Parsing.AngleSharp
 {
     class AngleSharpParser
     {
@@ -31,22 +31,33 @@ namespace Rosreestr_XML.Parser.AngleSharp
                 TableXML table = new TableXML(titles[i]);
                 var lines = docTables.ElementAt(i).QuerySelectorAll("tr").Skip(1);
                 //пропуск названий столбцов
-                
-                int currGroup = 1;
+
+                int nextGroup = 1;
 
                 foreach (var item in lines)
                 {
 
-                    if (IsGroup(item, currGroup))
+                    if (IsGroup(item, nextGroup))
                     {
-                        currGroup++;
-                        table.Add(GetGroup(item));
+                        nextGroup++;
+                        if (nextGroup == table.Groups.Count + 2)
+                            table.Groups.Add(GetGroup(item));
                     }
                     else
                     {
-                        // возможные ошибочные строки
-                        if (item.ChildElementCount != 4) continue;
-                        table.Last().Add(GetScheme(item));
+                        // Ошибочная строка - новая группа 9, (но после неё описаны 8.3 и 8.3 в  неактуальных)
+                        if (item.ChildElementCount != 4)
+                        {
+                            var docGr = item.QuerySelector("b");
+                            if (docGr != null)
+                            {
+                                GroupXML group = new GroupXML();
+                                group.NameGroup = docGr.TextContent.Trim();
+                                table.Groups.Add(group);
+                            }
+                        }
+                        else
+                            table.Groups[nextGroup - 2].Schemes.Add(GetScheme(item));
                     }
                 }
                 result[i] = table;
@@ -66,8 +77,10 @@ namespace Rosreestr_XML.Parser.AngleSharp
             // группа - отдельная xml схема
             else
             {
-                group = new GroupXML(null);
-                group.Add(GetScheme(item));
+                group = new GroupXML();
+                group.Schemes.Add(GetScheme(item));
+                group.NameGroup = group.Schemes.First().Num;
+
             }
             return group;
         }
@@ -75,12 +88,13 @@ namespace Rosreestr_XML.Parser.AngleSharp
         //строка - группа, котрая имеет только имя
         private bool IsGroup(IElement item, int num)
         {
+
             return item.Children.First().TextContent.Trim().StartsWith(num + "");
         }
         // разбор схемы
-        private XML_Scheme GetScheme(IElement item)
+        private SchemeXML GetScheme(IElement item)
         {
-            XML_Scheme scheme = new XML_Scheme();
+            SchemeXML scheme = new SchemeXML();
             SetNum(ref scheme, item.Children[0]);
             SetName(ref scheme, item.Children[1]);
             SetFile(ref scheme, item.Children[2]);
@@ -88,22 +102,22 @@ namespace Rosreestr_XML.Parser.AngleSharp
             return scheme;
         }
 
-        private void SetOrder(ref XML_Scheme scheme, IElement docOrder)
+        private void SetOrder(ref SchemeXML scheme, IElement docOrder)
         {
             var docLinks = docOrder.QuerySelectorAll("a");
             if (docLinks.Length > 0)
             {
                 for (int i = 0; i < docLinks.Length; i++)
                     scheme.OrderLink.Add_NotEq(BaseAddr + docLinks[i].GetAttribute("href").Trim());
-                
+
             }
             else
             {
-                scheme.OrderInfo =RemoveAllTrim(docOrder.TextContent);
+                scheme.OrderInfo = RemoveAllTrim(docOrder.TextContent);
             }
         }
 
-        private void SetFile(ref XML_Scheme scheme, IElement docFile)
+        private void SetFile(ref SchemeXML scheme, IElement docFile)
         {
             var docLink = docFile.QuerySelector("a");
             if (docLink != null)
@@ -117,7 +131,7 @@ namespace Rosreestr_XML.Parser.AngleSharp
          * [ссылка на файл с текстом NAME]
          * [остаток текста NAME]
          */
-        private void SetName(ref XML_Scheme scheme, IElement docName)
+        private void SetName(ref SchemeXML scheme, IElement docName)
         {
             //первый не пустой ребёнок
             IElement child = docName.Children.FirstOrDefault(x => x.TextContent.Length > 1);
@@ -130,7 +144,7 @@ namespace Rosreestr_XML.Parser.AngleSharp
             }
 
             //нет ссылки в первом ребёнке => это Name_Info
-            else if (child!=null && child.QuerySelector("a") == null)
+            else if (child != null && child.QuerySelector("a") == null)
             {
                 scheme.NameInfo = RemoveAllTrim(child.TextContent);
                 //ссылка это имя
@@ -160,7 +174,7 @@ namespace Rosreestr_XML.Parser.AngleSharp
             return res.ToString();
         }
 
-        private void SetNum(ref XML_Scheme scheme, IElement docNum)
+        private void SetNum(ref SchemeXML scheme, IElement docNum)
         {
             //выделение номера
             if (docNum != null)
