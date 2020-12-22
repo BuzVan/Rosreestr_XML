@@ -77,6 +77,7 @@ namespace Rosreestr_XML.Parsing.AngleSharp
             // группа - отдельная xml схема
             else
             {
+
                 group = new GroupXML();
                 group.Schemes.Add(GetScheme(item));
                 group.NameGroup = group.Schemes.First().Num;

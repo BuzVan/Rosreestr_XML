@@ -21,11 +21,10 @@ namespace Rosreestr_XML.Data
         }
         public GroupXML()
         {
-
+            Schemes = new List<SchemeXML>();
         }
         public GroupXML(string nameGroup) : this()
         {
-            Schemes = new List<SchemeXML>();
             NameGroup = nameGroup;
         }
 

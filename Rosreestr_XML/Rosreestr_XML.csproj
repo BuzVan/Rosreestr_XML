@@ -61,6 +61,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ModelView\ApplicationViewModel.cs" />
     <Compile Include="ModelView\DataXMLWorker.cs" />
     <Compile Include="Serialization\TableSerialization.cs" />
     <Page Include="MainWindow.xaml">

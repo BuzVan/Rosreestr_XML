@@ -9,29 +9,71 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"   Orientation="Horizontal">
             <Button x:Name="UploadButton" Content="Скачать с сайта" Click="UploadButton_Click"></Button>
             <Button x:Name="SaveButton" Content="Сохранить в файл" Click="SaveButton_Click"></Button>
             <Button x:Name="OpenButton" Content="Открыть из файла" Click="OpenButton_Click"></Button>
             </StackPanel>
-        <TreeView  Grid.Row="1" Name="treeView">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Path=Groups}">
-                    <TextBlock Text="{Binding Name}" TextTrimming="WordEllipsis"/>
-                    <HierarchicalDataTemplate.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Path=Schemes}">
-                            <TextBlock Text="{Binding Name}" TextTrimming="WordEllipsis"/>
-                            <HierarchicalDataTemplate.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Scheme.Name}" TextTrimming="WordEllipsis"/>
-                                </DataTemplate>
-                            </HierarchicalDataTemplate.ItemTemplate>
-                        </HierarchicalDataTemplate>
-                    </HierarchicalDataTemplate.ItemTemplate>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <TreeView Grid.Column="0" ItemsSource="{Binding Tables}"
+                       SelectedItemChanged="TreeView_SelectedItemChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Groups}">
+                        <StackPanel Orientation="Horizontal" >
+                            <CheckBox Margin="3" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}"/>
+                        </StackPanel>
+                        
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            
+                            <HierarchicalDataTemplate ItemsSource="{Binding Path=Schemes}">
+                                <StackPanel Orientation="Horizontal" >
+                                    <CheckBox Margin="3" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                    <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}"/>
+                                </StackPanel>
+                                <HierarchicalDataTemplate.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Margin="3" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                            <TextBlock Text="{Binding Scheme.Name}" ToolTip="{Binding Scheme.Name}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </HierarchicalDataTemplate.ItemTemplate>
+                            </HierarchicalDataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
+        HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+            <DockPanel Grid.Column="2" LastChildFill="False">
+                <StackPanel  DockPanel.Dock="Top" Orientation="Vertical" DataContext="{Binding SelectedScheme}">
+                    <TextBlock Text="{Binding Scheme.Num}"  TextWrapping="Wrap" TextAlignment="Center" FontSize="20" Background="BlanchedAlmond"/>
+                    <TextBlock Text="{Binding Scheme.Name}" TextWrapping="Wrap" FontStyle="Italic" TextAlignment="Justify" FontSize="18" Background="AliceBlue"/>
+                    <TextBlock Text="{Binding Scheme.NameInfo}" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <TextBlock Text="ИЗМЕНЕНИЙ НЕТ" TextWrapping="Wrap" TextAlignment="Center"/>
+                </StackPanel>
+                <Grid DockPanel.Dock="Bottom" Height="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="Открыть папку"/>
+                    <Button Grid.Column="1" Content="Скачать архив"/>
+                    <Button Grid.Column="2" Content="Скачать приказ"/>
+                </Grid>
+            </DockPanel>
+            
+        </Grid>
     </Grid>
 </Window>

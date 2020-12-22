@@ -3,6 +3,7 @@ using Rosreestr_XML.ModelView;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Rosreestr_XML
 {
@@ -11,29 +12,13 @@ namespace Rosreestr_XML
     /// </summary>
     public partial class MainWindow : Window
     {
-        DataXMLWorker dataWorker;
-        readonly ObservableCollection<ViewTable> Tables;
-        private void SetTables(List<ViewTable> data)
-        {
-            Tables.Clear();
-            foreach (var item in data)
-            {
-                Tables.Add(item);
-            }
-        }
+        ApplicationViewModel viewModel;
         public MainWindow()
         {
-            dataWorker = new DataXMLWorker();
-            Tables = new ObservableCollection<ViewTable>();
-
             InitializeComponent();
-            treeView.ItemsSource = Tables;
-            List<ViewTable> res;
-            if (dataWorker.TryOpenTables(out res))
-                SetTables(res);
-            else
-                UploadButton_Click(null, null);
 
+            viewModel = new ApplicationViewModel();
+            DataContext = viewModel;
 
         }
 
@@ -41,20 +26,24 @@ namespace Rosreestr_XML
         {
            
             UploadButton.IsEnabled = false;
-            List<ViewTable> data = await dataWorker.ParseTables();
-            SetTables(data);
+            await viewModel.Download();
             UploadButton.IsEnabled = true;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            dataWorker.SaveTables();
+            viewModel.Save();
             MessageBox.Show("Успешно сохранено");
         }
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
         {
-           SetTables(dataWorker.OpenTables());
+            viewModel.Open();
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            viewModel.SelectScheme(e.NewValue);
         }
     }
 }
