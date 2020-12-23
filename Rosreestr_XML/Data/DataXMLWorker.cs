@@ -42,15 +42,6 @@ namespace Rosreestr_XML.Data
             TableSerialization.Serialize(filename, data);
         }
         /// <summary>
-        /// Получитть таблицы из файла
-        /// </summary>
-        /// <returns></returns>
-        public List<ViewTable> OpenTables()
-        {
-            data = TableSerialization.Deserialize(filename);
-            return new List<ViewTable>(data.Select(x => new ViewTable(x)));
-        }
-        /// <summary>
         /// Попытаться получить таблицы из файла
         /// </summary>
         /// <param name="result"></param>

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Security.Cryptography;
 
 namespace Rosreestr_XML.Util
 {
@@ -45,12 +46,70 @@ namespace Rosreestr_XML.Util
             try
             {
                 System.IO.Directory.CreateDirectory(folderPath);
-                webClient.DownloadFile(addr, folderPath + fileName);
+                string fileDownloadPath = null;
+                if (File.Exists(folderPath + fileName))
+                {
+                    fileDownloadPath = Path.GetTempFileName();
+                    webClient.DownloadFile(addr, fileDownloadPath);
+                    FindHashDifference(folderPath + fileName, fileDownloadPath);
+                   
+                }
+                else
+                    webClient.DownloadFile(addr, folderPath + fileName);
+
+
             }
             //всякое бывает
             catch (Exception e)
             {
                 MessageBox.Show(e.Message +"\n" + e.StackTrace, "Произошла ошибка при скачивании файла", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private static void FindHashDifference(string fileOld, string fileNew)
+        {
+            string hashOld = ComputeMD5Checksum(fileOld);
+            string hashNew = ComputeMD5Checksum(fileNew);
+            if (hashOld != hashNew)
+                SaveFiles(fileNew, fileOld);
+            else
+                File.Delete(fileNew);
+            
+        }
+
+        private static void SaveFiles(string fileNew, string fileOld)
+        {
+            // Файлы могли быть:
+            // *_old.* -> fileDelete
+            // *.* -> fileOld
+
+            //самый старый файл
+            string fileDelete = AddSuff(fileOld, "_old");
+            // замена его на старый
+            File.Copy(fileOld, fileDelete, true);
+            // замена старого на новый
+            File.Copy(fileNew, fileOld, true);
+            // удаление нового файла, чтобы не бесил
+            File.Delete(fileNew);
+        }
+
+        private static string AddSuff(string file, string suf)
+        {
+            int pointInd = file.LastIndexOf('.');
+            if (pointInd == -1) pointInd = file.Length;
+            return file.Insert(pointInd, suf);
+        }
+
+        private static string ComputeMD5Checksum(string path)
+        {
+            using (FileStream fs = System.IO.File.OpenRead(path))
+            {
+                MD5 md5 = new MD5CryptoServiceProvider();
+                byte[] fileData = new byte[fs.Length];
+                fs.Read(fileData, 0, (int)fs.Length);
+                byte[] checkSum = md5.ComputeHash(fileData);
+                string result = BitConverter.ToString(checkSum).Replace("-", String.Empty);
+                return result;
             }
         }
     }

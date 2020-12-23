@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Rosreestr_XML"
         mc:Ignorable="d"
-        Title="XML-схемы Росреестра" Height="450" Width="800" Closing="Window_Closing">
+        Title="XML-схемы Росреестра" Height="600" Width="800" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -25,14 +25,14 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <DockPanel Grid.Column="0" LastChildFill="True">
-                <Grid DockPanel.Dock="Bottom">
+            <DockPanel Grid.Column="0" LastChildFill="True" Margin="5">
+                <Grid DockPanel.Dock="Bottom" Margin="0,5,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" x:Name="DownloadSelectedAllButton" Content="Скачать выбранные архивы c приказами" Click="DownloadSelectedAllButton_Click"  Height="50"  Margin="5" />
-                    <Button Grid.Column="1" x:Name="DownloadSelectedFileButton" Content="Без приказов" Click="DownloadSelectedFileButton_Click"  Height="50" Margin="0,5,5,5"/>
+                    <Button Grid.Column="0" x:Name="DownloadSelectedAllButton" Content="Скачать выбранные архивы c приказами" Click="DownloadSelectedAllButton_Click"  Height="50" />
+                    <Button Grid.Column="1" x:Name="DownloadSelectedFileButton" Content="Без приказов" Click="DownloadSelectedFileButton_Click"  Height="50" Margin="5,0,0,0"/>
                 </Grid>
                 
                 <TreeView DockPanel.Dock="Top" ItemsSource="{Binding Tables}"
@@ -65,11 +65,11 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
             </DockPanel>
-          
+
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="4"
         HorizontalAlignment="Center" VerticalAlignment="Stretch" />
-            <DockPanel Grid.Column="2" LastChildFill="True" Visibility="{Binding SchemeSelectVis}">
-                <Grid DockPanel.Dock="Bottom" Height="50" Margin="5">
+            <DockPanel Grid.Column="2" Margin="5"  LastChildFill="True" Visibility="{Binding SchemeSelectVis}">
+                <Grid DockPanel.Dock="Bottom" Height="50" Margin="0,5,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -83,19 +83,22 @@
                             Content="{Binding SelectedScheme.OrderDownloadText}" 
                             IsEnabled="{Binding SelectedScheme.OrderDownloadEnabled}"/>
                 </Grid>
-                <StackPanel DockPanel.Dock="Top" DataContext="{Binding SelectedScheme}">
+                <ScrollViewer  DockPanel.Dock="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel  DataContext="{Binding SelectedScheme}">
 
-                    <TextBlock Text="{Binding Scheme.Num}" TextWrapping="Wrap" TextAlignment="Center" FontSize="20" Background="BlanchedAlmond"/>
-                    <TextBlock Text="{Binding Scheme.NameInfo}" TextAlignment="Center" FontSize="20" Background="AliceBlue"/>
-                    <TextBlock Text="{Binding Scheme.Name}" TextWrapping="Wrap" FontStyle="Italic" TextAlignment="Justify" FontSize="18" Background="AliceBlue"/>
-                    <StackPanel Orientation="Vertical" Visibility="{Binding Differences.ChangedVis}">
-                        <TextBlock Text="НОВАЯ СХЕМА" TextAlignment="Center" Background="LawnGreen" Visibility="{Binding Differences.NewScheme}"/>
-                        <TextBlock Text="CХЕМА УДАЛЕНА" TextAlignment="Center" Background="OrangeRed" Visibility="{Binding Differences.DeleteScheme}"/>
-                        <TextBlock Text="ИЗМЕНЕНА ПОДПИСЬ ПРОЕКТ ДОКУМЕНТА" TextAlignment="Center" Background="Yellow" Visibility="{Binding Differences.DifferentNameInfo}"/>
-                        <TextBlock Text="ИЗМЕНЕНЫ ССЫЛКИ НА СКАЧИВАНИЕ СХЕМЫ" TextAlignment="Center" Background="Aquamarine" Visibility="{Binding Differences.DifferentFileLink}"/>
-                        <TextBlock Text="ИЗМЕНЕНЫ ССЫЛКИ НА СКАЧИВАНИЕ ПРИКАЗА" TextAlignment="Center" Background="Beige" Visibility="{Binding Differences.DifferentOrderLink}"/>
+                        <TextBlock Text="{Binding Scheme.Num}" TextWrapping="Wrap" TextAlignment="Center" FontSize="20" Background="BlanchedAlmond"/>
+                        <TextBlock Text="{Binding Scheme.NameInfo}" TextAlignment="Center" FontSize="20" Background="AliceBlue"/>
+                        <TextBlock Text="{Binding Scheme.Name}" TextWrapping="Wrap" FontStyle="Italic" TextAlignment="Justify" FontSize="18" Background="AliceBlue"/>
+                        <StackPanel Orientation="Vertical" Visibility="{Binding Differences.ChangedVis}">
+                            <TextBlock Text="НОВАЯ СХЕМА" TextAlignment="Center" Background="LawnGreen" Visibility="{Binding Differences.NewScheme}"/>
+                            <TextBlock Text="CХЕМА УДАЛЕНА" TextAlignment="Center" Background="OrangeRed" Visibility="{Binding Differences.DeleteScheme}"/>
+                            <TextBlock Text="ИЗМЕНЕНА ПОДПИСЬ ПРОЕКТ ДОКУМЕНТА" TextAlignment="Center" Background="Yellow" Visibility="{Binding Differences.DifferentNameInfo}"/>
+                            <TextBlock Text="ИЗМЕНЕНЫ ССЫЛКИ НА СКАЧИВАНИЕ СХЕМЫ" TextAlignment="Center" Background="Aquamarine" Visibility="{Binding Differences.DifferentFileLink}"/>
+                            <TextBlock Text="ИЗМЕНЕНЫ ССЫЛКИ НА СКАЧИВАНИЕ ПРИКАЗА" TextAlignment="Center" Background="Beige" Visibility="{Binding Differences.DifferentOrderLink}"/>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
+                </ScrollViewer>
+               
                
             </DockPanel>
             

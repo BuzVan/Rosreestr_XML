@@ -70,10 +70,6 @@ namespace Rosreestr_XML.ModelView
             set
             {
                 isEnabled = value;
-                foreach (var item in Schemes)
-                {
-                    item.IsEnabled = value;
-                }
                 OnPropertyChanged("IsEnabled");
             }
         }
@@ -119,6 +115,7 @@ namespace Rosreestr_XML.ModelView
         /// <param name="folder"></param>
         internal void DownloadSelectedAll(string folder)
         {
+            IsEnabled = false;
             if (this.IsChecked != false)
             {
                 foreach (var item in Schemes)
@@ -128,8 +125,7 @@ namespace Rosreestr_XML.ModelView
             }
             isChecked = false;
             OnPropertyChanged("IsChecked");
-            isEnabled = true;
-            OnPropertyChanged("IsEnabled");
+            IsEnabled = true;
         }
         /// <summary>
         /// Скачать выбранные схемы без приказов 
@@ -137,6 +133,7 @@ namespace Rosreestr_XML.ModelView
         /// <param name="folder"></param>
         internal void DownloadSelectedFile(string folder)
         {
+            IsEnabled = false;
             if (this.IsChecked != false)
             {
                 foreach (var item in Schemes)
@@ -146,8 +143,7 @@ namespace Rosreestr_XML.ModelView
             }
             isChecked = false;
             OnPropertyChanged("IsChecked");
-            isEnabled = true;
-            OnPropertyChanged("IsEnabled");
+            IsEnabled = true;
         }
         /// <summary>
         /// Выделить отличия

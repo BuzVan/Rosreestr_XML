@@ -187,7 +187,6 @@ namespace Rosreestr_XML.Parsing.AngleSharp
                 scheme.FileLink.Add_NotEq(link);
 
 
-
             }
             //имя находится в сслыке и в тексте после ней
             else

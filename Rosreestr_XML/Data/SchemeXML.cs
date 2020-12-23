@@ -189,7 +189,7 @@ namespace Rosreestr_XML.Data
 
             List<DifferenceType> res = new List<DifferenceType>();
 
-            if (this.NameInfo != NameInfo)
+            if (this.NameInfo != scheme.NameInfo)
                 res.Add(DifferenceType.DifTextProjectDoc);
             
             if (this.FileLink.Count != scheme.FileLink.Count)

@@ -40,10 +40,6 @@ namespace Rosreestr_XML.ModelView
             set
             {
                 isEnabled = value;
-                foreach (var item in Groups)
-                {
-                    item.IsEnabled = value;
-                }
                 OnPropertyChanged("IsEnabled");
             }
         }
@@ -109,7 +105,8 @@ namespace Rosreestr_XML.ModelView
         /// </summary>
         /// <param name="folder"></param>
         private void DownloadSelectedAll(string folder)
-        { 
+        {
+            IsEnabled = false;
             if (this.IsChecked != false)
             {
                 foreach (var item in Groups)
@@ -119,8 +116,7 @@ namespace Rosreestr_XML.ModelView
             }
             isChecked = false;
             OnPropertyChanged("IsChecked");
-            isEnabled = true;
-            OnPropertyChanged("IsEnabled");
+            IsEnabled = true;
         }
         internal async Task DownloadSelectedFileAsync(string downloadPath)
         {
