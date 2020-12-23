@@ -5,6 +5,9 @@ using System.Windows;
 
 namespace Rosreestr_XML.ModelView
 {
+    /// <summary>
+    /// Класс отображений всех изменений схемы
+    /// </summary>
     public class ChangedVisibility : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

@@ -11,10 +11,20 @@ using AngleSharp.Html.Dom;
 
 namespace Rosreestr_XML.Parsing.AngleSharp
 {
+    /// <summary>
+    /// Класс парсинга сайта с помощью Angle Sharp
+    /// </summary>
     class AngleSharpParser
     {
+        /// <summary>
+        /// Адресс сайта Росреестра
+        /// </summary>
         private const string BaseAddr = "https://rosreestr.gov.ru";
-
+        /// <summary>
+        /// Спарсить страницу росреестра
+        /// </summary>
+        /// <param name="document">Страница росреестра со схемами xml</param>
+        /// <returns></returns>
         public TableXML[] Parse(IHtmlDocument document)
         {
             //таблицы
@@ -28,15 +38,15 @@ namespace Rosreestr_XML.Parsing.AngleSharp
             TableXML[] result = new TableXML[titles.Length];
             for (int i = 0; i < titles.Length; i++)
             {
+                //сформировать таблицу
                 TableXML table = new TableXML(titles[i]);
                 var lines = docTables.ElementAt(i).QuerySelectorAll("tr").Skip(1);
                 //пропуск названий столбцов
-
                 int nextGroup = 1;
-
+                // потрочный разбор таблицы
                 foreach (var item in lines)
                 {
-
+                    //добавление группы
                     if (IsGroup(item, nextGroup))
                     {
                         nextGroup++;
@@ -58,6 +68,7 @@ namespace Rosreestr_XML.Parsing.AngleSharp
                                 table.Groups.Add(group);
                             }
                         }
+                        // добавление схемы в последнюю группу
                         else
                             table.Groups[nextGroup - 2].Schemes.Add(GetScheme(item));
                     }
@@ -68,6 +79,11 @@ namespace Rosreestr_XML.Parsing.AngleSharp
             return result;
         }
 
+        /// <summary>
+        /// Выделить группу из строки таблицы
+        /// </summary>
+        /// <param name="item">строка таблицы</param>
+        /// <returns></returns>
         private GroupXML GetGroup(IElement item)
         {
             GroupXML group;
@@ -104,7 +120,7 @@ namespace Rosreestr_XML.Parsing.AngleSharp
             SetOrder(ref scheme, item.Children[3]);
             return scheme;
         }
-
+        // Установить ссылки приказов и информацию о приказах
         private void SetOrder(ref SchemeXML scheme, IElement docOrder)
         {
             var docLinks = docOrder.QuerySelectorAll("a");
@@ -125,7 +141,7 @@ namespace Rosreestr_XML.Parsing.AngleSharp
                 scheme.OrderInfo = RemoveAllTrim(docOrder.TextContent);
             }
         }
-
+        //сформировать ссылки на файл
         private void SetFile(ref SchemeXML scheme, IElement docFile)
         {
             var docLink = docFile.QuerySelector("a");
@@ -183,7 +199,7 @@ namespace Rosreestr_XML.Parsing.AngleSharp
                 scheme.FileLink.Add_NotEq(link);
             }
         }
-
+        // удалить все лишние символы. практически...
         private string RemoveAllTrim(string textContent)
         {
             string[] parts = textContent.Trim().Split('\n');

@@ -9,8 +9,16 @@ using System.Xml.Serialization;
 
 namespace Rosreestr_XML.Serialization
 {
+    /// <summary>
+    /// Сериализация Схем
+    /// </summary>
     public static class TableSerialization
     {
+        /// <summary>
+        /// Сериализовать массив таблиц XML
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="data"></param>
         public static void Serialize(string filename, TableXML[] data)
         {
             File.Delete(filename);
@@ -20,6 +28,11 @@ namespace Rosreestr_XML.Serialization
                 formatter.Serialize(fs, data);
             }
         }
+        /// <summary>
+        /// Десериализовать массив таблиц XML
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static TableXML[] Deserialize(string filename)
         {
             XmlSerializer formatter = new XmlSerializer(typeof(TableXML[]));
@@ -30,6 +43,12 @@ namespace Rosreestr_XML.Serialization
             }
             return data;
         }
+        /// <summary>
+        /// Попытаться десериализовать массив таблиц
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public static bool TryDeserialize(string filename, out TableXML[] result)
         {
             try

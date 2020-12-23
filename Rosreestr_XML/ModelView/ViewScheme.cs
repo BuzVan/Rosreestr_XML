@@ -13,13 +13,24 @@ using System.Windows.Media;
 
 namespace Rosreestr_XML.ModelView
 {
+    /// <summary>
+    /// Отображение схемы
+    /// </summary>
     public class ViewScheme : INotifyPropertyChanged
     {
-
+        /// <summary>
+        /// родитель - группа
+        /// </summary>
         internal readonly ViewGroup Parent;
+        /// <summary>
+        /// сама схема
+        /// </summary>
         public SchemeXML Scheme { get; }
 
         private ChangedVisibility differences;
+        /// <summary>
+        /// все изменения схемы
+        /// </summary>
         public ChangedVisibility Differences
         {
             get => differences;
@@ -31,6 +42,9 @@ namespace Rosreestr_XML.ModelView
         }
 
         private bool isChecked = true;
+        /// <summary>
+        /// Выбрана ли группа (CheckBox)
+        /// </summary>
         public bool IsChecked
         {
             get => isChecked;
@@ -42,6 +56,9 @@ namespace Rosreestr_XML.ModelView
             }
         }
         private bool isEnabled = true;
+        /// <summary>
+        /// Активированна ли CheckBox
+        /// </summary>
         public bool IsEnabled
         {
             get => isEnabled;
@@ -51,8 +68,14 @@ namespace Rosreestr_XML.ModelView
                 OnPropertyChanged("IsEnabled");
             }
         }
+        /// <summary>
+        /// Можно ли скачать файл
+        /// </summary>
         public bool FileDownloadEnabled => this.Scheme.FileLink.Count > 0;
         public string FileDownloadText => FileDownloadEnabled ? "Скачать Схему" : "Недоступно";
+        /// <summary>
+        /// можно ли скачать приказ
+        /// </summary>
         public bool OrderDownloadEnabled => this.Scheme.OrderLink.Count > 0;
         public string OrderDownloadText => OrderDownloadEnabled ? "Скачать Приказ" : this.Scheme.OrderInfo != null ? this.Scheme.OrderInfo : "Недоступно";
         public ViewScheme(ViewGroup parent, SchemeXML scheme)
@@ -104,6 +127,9 @@ namespace Rosreestr_XML.ModelView
             IsEnabled = true;
         }
         private DifferenceType[] differenceTypes = new DifferenceType[] { DifferenceType.Same };
+        /// <summary>
+        /// Закрашивание строки схемы
+        /// </summary>
         public Brush Background
         {
             get

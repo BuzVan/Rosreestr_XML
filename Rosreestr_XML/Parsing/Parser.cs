@@ -7,6 +7,9 @@ using System.Windows;
 
 namespace Rosreestr_XML.Parsing
 {
+    /// <summary>
+    /// Скачивание и разбор страницы Росреестра
+    /// </summary>
     public class Parser
     {
         const string Address = "https://rosreestr.gov.ru/site/fiz/zaregistrirovat-nedvizhimoe-imushchestvo-/xml-skhemy/";

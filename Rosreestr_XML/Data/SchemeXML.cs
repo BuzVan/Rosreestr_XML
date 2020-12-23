@@ -23,19 +23,47 @@ namespace Rosreestr_XML.Data
     /// </summary>
     public enum DifferenceType
     {
+        /// <summary>
+        /// Одинаковые
+        /// </summary>
         Same,
+        /// <summary>
+        /// Совершенно разные
+        /// </summary>
         NotSame,
+        /// <summary>
+        /// Разница в подписи
+        /// </summary>
         DifTextProjectDoc,
+        /// <summary>
+        /// Разница в ссылках файла
+        /// </summary>
         DifferentFileLink,
+        /// <summary>
+        /// Разница в ссылках приказов
+        /// </summary>
         DifferentOrderLink,
+        /// <summary>
+        /// Новая схема
+        /// </summary>
         NewScheme,
+        /// <summary>
+        /// Удалённая схема
+        /// </summary>
         DeleteScheme
     }
+    /// <summary>
+    /// Модель представления XML-схемы сайта Росреестра
+    /// </summary>
     [Serializable]
+    
     public class SchemeXML
     {
         
         private string num;
+        /// <summary>
+        /// Номер схемы
+        /// </summary>
         public string Num
         {
             get=> num;
@@ -44,11 +72,23 @@ namespace Rosreestr_XML.Data
                 num = value.Trim(' ', '.');
             }
         }
+        /// <summary>
+        /// Имя схемы
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Информация о схеме (ПРОЕКТ ДОКУМЕНТА)
+        /// </summary>
         public string NameInfo { get; set; }
 
+        /// <summary>
+        /// Все ссылки для скачивания схемы
+        /// </summary>
         public List<string> FileLink { get; set; }
         
+        /// <summary>
+        /// Папка схемы. Путь состоит из номера группы и схемы
+        /// </summary>
         private string SchemeFolderPath
         {
             get
@@ -66,9 +106,20 @@ namespace Rosreestr_XML.Data
 
             }
         }
+        /// <summary>
+        /// Путь к папке файла начиная с имени таблицы
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
         public string GetFolderPath(string tableName) => string.Format($"{tableName}\\{SchemeFolderPath}");
 
+        /// <summary>
+        /// Информация о приказе
+        /// </summary>
         public String OrderInfo { get; set; }
+        /// <summary>
+        /// Ссылки приказов для скачивания
+        /// </summary>
         public List<string> OrderLink { get; set; }
 
         public SchemeXML()
@@ -91,7 +142,11 @@ namespace Rosreestr_XML.Data
             OrderLink = orderLink;
         }
 
-        
+        /// <summary>
+        /// Скачать приказ
+        /// </summary>
+        /// <param name="folder">путь к папке таблицы</param>
+        /// <param name="tableName">имя таблицы, которой пренадлежит схема</param>
         internal void DownloadOrder(string folder, string tableName)
         {
             if (OrderLink.Count == 0) return;
@@ -104,6 +159,11 @@ namespace Rosreestr_XML.Data
             }
            
         }
+        /// <summary>
+        /// Скачать схему
+        /// </summary>
+        /// <param name="folder">путь к папке таблицы</param>
+        /// <param name="tableName">имя таблицы, которой пренадлежит схема</param>
         internal void DownloadScheme(string folder, string tableName)
         {
             if (FileLink.Count == 0) return;
@@ -115,7 +175,11 @@ namespace Rosreestr_XML.Data
                 FileDownloader.Download(addr, folderPath);
             }
         }
-
+        /// <summary>
+        /// Поиск различий между схемами
+        /// </summary>
+        /// <param name="scheme">вторая схема</param>
+        /// <returns>Массив различий схем</returns>
         internal DifferenceType[] FindDifferents(SchemeXML scheme)
         {
            

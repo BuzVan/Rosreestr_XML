@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Rosreestr_XML.Parsing
 {
+    /// <summary>
+    /// Класс скачивания HTML страницы
+    /// </summary>
     class HtmlLoader
     {
         HttpClient client;
@@ -19,6 +22,10 @@ namespace Rosreestr_XML.Parsing
             this.url = url;
 
         }
+        /// <summary>
+        /// Скачать страницу html
+        /// </summary>
+        /// <returns>содержание страницы</returns>
         public async Task<string> DownloadAsync()
         {
             HttpResponseMessage response = await client.GetAsync(url);

@@ -14,20 +14,33 @@ using System.Windows.Forms;
 
 namespace Rosreestr_XML.ModelView
 {
+    /// <summary>
+    /// Представление Приложения
+    /// </summary>
     class ApplicationViewModel : INotifyPropertyChanged
     {
-        private ViewScheme selectedScheme;
-        public ObservableCollection<ViewTable> Tables { get; set; }
 
         DataXMLWorker dataWorker;
-
-        public Visibility SchemeSelectVis
+        /// <summary>
+        /// Все схемы
+        /// </summary>
+        public ObservableCollection<ViewTable> Tables { get; set; }
+        /// <summary>
+        /// Обновить схемы по данным
+        /// </summary>
+        /// <param name="data">Новые данные</param>
+        private void SetTables(List<ViewTable> data)
         {
-            get
+            Tables.Clear();
+            foreach (var item in data)
             {
-                return (SelectedScheme == null)? Visibility.Collapsed: Visibility.Visible;
+                Tables.Add(item);
             }
         }
+        private ViewScheme selectedScheme;
+        /// <summary>
+        /// Выбранная схема
+        /// </summary>
         public ViewScheme SelectedScheme
         {
             get { return selectedScheme; }
@@ -37,9 +50,27 @@ namespace Rosreestr_XML.ModelView
                 OnPropertyChanged("SelectedScheme");
                 OnPropertyChanged("SchemeSelectVis");
             }
-            
+
         }
+
+
+
+        /// <summary>
+        /// Отображение информации о выбранной схеме
+        /// Отображет, если выбрана какая-либо схема
+        /// </summary>
+        public Visibility SchemeSelectVis
+        {
+            get
+            {
+                return (SelectedScheme == null)? Visibility.Collapsed: Visibility.Visible;
+            }
+        }
+
         private string infoPanel;
+        /// <summary>
+        /// Текст информационной панели
+        /// </summary>
         public string InfoPanel
         {
             get => infoPanel;
@@ -51,7 +82,10 @@ namespace Rosreestr_XML.ModelView
         }
 
 
-
+        /// <summary>
+        /// Выбрать схему
+        /// </summary>
+        /// <param name="scheme">Схема</param>
         public void SelectScheme(object scheme)
         {
             if (scheme is ViewScheme)
@@ -82,6 +116,10 @@ namespace Rosreestr_XML.ModelView
            
         }
 
+        /// <summary>
+        /// Скачать таблицы с сайта
+        /// </summary>
+        /// <returns></returns>
         public async Task Download()
         {
             InfoPanel = "Скачивание таблиц с сайта...";
@@ -93,7 +131,10 @@ namespace Rosreestr_XML.ModelView
         }
 
 
-
+        /// <summary>
+        /// Поиск обновлений на сайте
+        /// </summary>
+        /// <returns></returns>
         public async Task SelectDifferentAsync()
         {
             InfoPanel = "Поиск обновлений на сайте...";
@@ -109,13 +150,18 @@ namespace Rosreestr_XML.ModelView
             }
             
         }
+        /// <summary>
+        /// Сохранение схем в файле
+        /// </summary>
         public void Save()
         {
             dataWorker.SaveTables();
         }
 
 
-
+        /// <summary>
+        /// Открыть схемы из файла
+        /// </summary>
         public void Open()
         {
 
@@ -126,19 +172,13 @@ namespace Rosreestr_XML.ModelView
                 System.Windows.MessageBox.Show("Ошибка открытия файла. Рекомендуется обновить с сайта. При повторении ошибки удалите файл tables.xml");
             
         }
-        private void SetTables(List<ViewTable> data)
-        {
-            Tables.Clear();
-            foreach (var item in data)
-            {
-                Tables.Add(item);
-            }
-        }
+        //Связь изменений свойств с отображением их
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
         // команда открытия главной папки
         private RelayCommand openMainFolderCommand;
         public RelayCommand OpenMainFolderCommand => openMainFolderCommand ??
@@ -183,7 +223,9 @@ namespace Rosreestr_XML.ModelView
                       OpenFolderCommand.Execute(null);
                   }));
 
-
+        /// <summary>
+        /// Главная папка проекта
+        /// </summary>
         private static string downloadPath = FileDownloader.MAIN_FOLDER;
         internal async Task DownloadSelectedAllAsync()
         {

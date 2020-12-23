@@ -10,6 +10,9 @@ using System.Windows.Media;
 using Rosreestr_XML.Data;
 namespace Rosreestr_XML.ModelView
 {
+   /// <summary>
+   /// Отображение таблицы
+   /// </summary>
     public class ViewTable : INotifyPropertyChanged
     {
         public string Name { get; set; }
@@ -101,7 +104,10 @@ namespace Rosreestr_XML.ModelView
         {
             await Task.Run(() => DownloadSelectedAll(folder));
         }
-
+        /// <summary>
+        /// Скачать выбранные схемы с приказами
+        /// </summary>
+        /// <param name="folder"></param>
         private void DownloadSelectedAll(string folder)
         { 
             if (this.IsChecked != false)
@@ -120,7 +126,10 @@ namespace Rosreestr_XML.ModelView
         {
             await Task.Run(() => DownloadSelectedFile(downloadPath));
         }
-
+        /// <summary>
+        /// Скачать выбранные схемы без приказов
+        /// </summary>
+        /// <param name="downloadPath"></param>
         private void DownloadSelectedFile(string downloadPath)
         {
             IsEnabled = false;
@@ -135,7 +144,10 @@ namespace Rosreestr_XML.ModelView
             OnPropertyChanged("IsChecked");
             IsEnabled = true;
         }
-
+        /// <summary>
+        /// Отобразить изменения 
+        /// </summary>
+        /// <param name="differences"></param>
         internal void SelectDifference(DifferenceType[] differences)
         {
             if (differences[0] == DifferenceType.Same || differences[0] == DifferenceType.NotSame)

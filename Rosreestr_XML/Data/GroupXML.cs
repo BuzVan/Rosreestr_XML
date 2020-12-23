@@ -8,10 +8,19 @@ using System.Threading.Tasks;
 
 namespace Rosreestr_XML.Data
 {
+    /// <summary>
+    /// Модель группы таблицы XML-схем с сайта Росрееста
+    /// </summary>
     [Serializable]
     public class GroupXML
     {
+        /// <summary>
+        /// Имя группы
+        /// </summary>
         public string NameGroup { get; set; }
+        /// <summary>
+        /// Список схем группы
+        /// </summary>
         public List<SchemeXML> Schemes { get; set; }
 
         public SchemeXML this[int i]

@@ -7,31 +7,54 @@ using System.Threading.Tasks;
 
 namespace Rosreestr_XML.Data
 {
+    /// <summary>
+    /// Помощник работы со схемами. Реализует основные функции работы с схемами-XML
+    /// </summary>
     class DataXMLWorker
     {
+        /// <summary>
+        /// Имя файла, в котором сохраняются полученные xml-схемы
+        /// </summary>
         private static string filename = "tables.xml";
+        /// <summary>
+        /// Массив полученных таблиц XML
+        /// </summary>
         private TableXML[] data;
         public DataXMLWorker()
         {
             data = new TableXML[0];
         }
-
+        /// <summary>
+        /// Асинхронный парсинг таблиц с сайта росреестра
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<ViewTable>> ParseTables()
         {
             Parsing.Parser taskParser = new Parsing.Parser();
             data = await taskParser.ParseAsync();
             return new List<ViewTable>(data.Select(x => new ViewTable(x)));
         }
+        /// <summary>
+        /// Сохранение таблиц в файл
+        /// </summary>
         public void SaveTables()
         {
             TableSerialization.Serialize(filename, data);
         }
-
+        /// <summary>
+        /// Получитть таблицы из файла
+        /// </summary>
+        /// <returns></returns>
         public List<ViewTable> OpenTables()
         {
             data = TableSerialization.Deserialize(filename);
             return new List<ViewTable>(data.Select(x => new ViewTable(x)));
         }
+        /// <summary>
+        /// Попытаться получить таблицы из файла
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns> true - если получилось получить таблицы</returns>
         public bool TryOpenTables(out List<ViewTable> result)
         {
             TableXML[] trydata = null;
@@ -44,7 +67,10 @@ namespace Rosreestr_XML.Data
             }
             return res;
         }
-
+        /// <summary>
+        /// Получить схемы с сайта и выделить отличия с текущими схемами
+        /// </summary>
+        /// <returns>Таблицы с выделенем изменений</returns>
         public async Task<List<ViewTable>> DownloadAndSelectDifferentAsync()
         {
             Parsing.Parser taskParser = new Parsing.Parser();

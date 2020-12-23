@@ -10,13 +10,28 @@ using System.Windows.Media;
 using Rosreestr_XML.Data;
 namespace Rosreestr_XML.ModelView
 {
+    /// <summary>
+    /// МОдель отображения группы
+    /// </summary>
     public class ViewGroup : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Таблица - родитель группы
+        /// </summary>
         internal readonly ViewTable Parent;
+        /// <summary>
+        /// имя группы
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Список схем
+        /// </summary>
         public ObservableCollection<ViewScheme> Schemes { get; set; }
 
         private bool? isChecked = true;
+        /// <summary>
+        /// Выбрана ли группа. Связь с CheckBox
+        /// </summary>
         public bool? IsChecked
         {
             get => isChecked;
@@ -32,6 +47,7 @@ namespace Rosreestr_XML.ModelView
                 OnPropertyChanged("IsChecked");
             }
         }
+        //проверить IsChecked (посмотрев на детей)
         public void IsCheckedCheck()
         { 
             int count = Schemes.Count(x => x.IsChecked);
@@ -45,6 +61,9 @@ namespace Rosreestr_XML.ModelView
                
         }
         private bool isEnabled = true;
+        /// <summary>
+        /// Активирована ли группа (связана с CheckBox.Enabled)
+        /// </summary>
         public bool IsEnabled
         {
             get => isEnabled;
@@ -58,7 +77,13 @@ namespace Rosreestr_XML.ModelView
                 OnPropertyChanged("IsEnabled");
             }
         }
+        /// <summary>
+        /// Cписок изменений в группе
+        /// </summary>
         private List<DifferenceType> differenceTypes = new List<DifferenceType>();
+        /// <summary>
+        /// Цвет строки группы в зависимости от списка изменений
+        /// </summary>
         public Brush Background
         {
             get
@@ -88,7 +113,10 @@ namespace Rosreestr_XML.ModelView
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
-
+        /// <summary>
+        /// Скачать выбранные схемы с приказами
+        /// </summary>
+        /// <param name="folder"></param>
         internal void DownloadSelectedAll(string folder)
         {
             if (this.IsChecked != false)
@@ -103,6 +131,10 @@ namespace Rosreestr_XML.ModelView
             isEnabled = true;
             OnPropertyChanged("IsEnabled");
         }
+        /// <summary>
+        /// Скачать выбранные схемы без приказов 
+        /// </summary>
+        /// <param name="folder"></param>
         internal void DownloadSelectedFile(string folder)
         {
             if (this.IsChecked != false)
@@ -117,7 +149,10 @@ namespace Rosreestr_XML.ModelView
             isEnabled = true;
             OnPropertyChanged("IsEnabled");
         }
-
+        /// <summary>
+        /// Выделить отличия
+        /// </summary>
+        /// <param name="differences"></param>
         internal void SelectDifference(DifferenceType[] differences)
         {
             if (differences[0] == DifferenceType.Same || differences[0] == DifferenceType.NotSame)

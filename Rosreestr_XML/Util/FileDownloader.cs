@@ -10,9 +10,20 @@ using System.Windows.Controls;
 
 namespace Rosreestr_XML.Util
 {
+    /// <summary>
+    /// Скачивание файлов
+    /// </summary>
     class FileDownloader
     {
+        /// <summary>
+        /// Главная папка схем
+        /// </summary>
         public static string MAIN_FOLDER = "Данные";
+        /// <summary>
+        /// Скачать файл
+        /// </summary>
+        /// <param name="addr">ссылка на скачивание</param>
+        /// <param name="folderPath">путь к файлу</param>
         internal static void Download(Uri addr, string folderPath)
         {
             WebClient webClient = new WebClient();
@@ -36,6 +47,7 @@ namespace Rosreestr_XML.Util
                 System.IO.Directory.CreateDirectory(folderPath);
                 webClient.DownloadFile(addr, folderPath + fileName);
             }
+            //всякое бывает
             catch (Exception e)
             {
                 MessageBox.Show(e.Message +"\n" + e.StackTrace, "Произошла ошибка при скачивании файла", MessageBoxButton.OK, MessageBoxImage.Error);

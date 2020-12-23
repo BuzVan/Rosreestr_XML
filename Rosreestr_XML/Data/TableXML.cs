@@ -10,12 +10,21 @@ using System.Threading.Tasks;
 namespace Rosreestr_XML.Data
 {
 
+    /// <summary>
+    /// Модель Таблицы XML-схем с Сайта Росреестра
+    /// </summary>
     [Serializable]
     public class TableXML
     {
 
+        /// <summary>
+        /// Имя таблицы
+        /// </summary>
         public string NameTable { get; set; }
 
+        /// <summary>
+        /// Список групп в таблице
+        /// </summary>
         public List<GroupXML> Groups { get; set; }
 
         public GroupXML this[int i]

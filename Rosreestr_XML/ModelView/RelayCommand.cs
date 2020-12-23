@@ -7,6 +7,9 @@ using System.Windows.Input;
 
 namespace Rosreestr_XML.ModelView
 {
+    /// <summary>
+    /// Класс команды -> для вызова в xaml
+    /// </summary>
     public class RelayCommand : ICommand
     {
         private Action<object> execute;
