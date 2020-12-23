@@ -5,73 +5,98 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Rosreestr_XML"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"   Orientation="Horizontal">
-            <Button x:Name="UploadButton" Content="Скачать с сайта" Click="UploadButton_Click"></Button>
-            <Button x:Name="SaveButton" Content="Сохранить в файл" Click="SaveButton_Click"></Button>
-            <Button x:Name="OpenButton" Content="Открыть из файла" Click="OpenButton_Click"></Button>
+        <DockPanel Grid.Row="0" LastChildFill="True" Background="#FFC7C7C7">
+            <StackPanel DockPanel.Dock="Left"  Orientation="Horizontal" >
+                <Button x:Name="UploadButton" Content="Обновить с сайта" Click="UploadButton_Click" Margin="0,0,1,0"></Button>
+                <Button Content="Открыть папку" Command="{Binding OpenMainFolderCommand}"></Button>
             </StackPanel>
+            <TextBlock DockPanel.Dock="Right" TextAlignment="Right" TextWrapping="Wrap" Margin="5,0,5,0"
+                       Text="{Binding InfoPanel}"></TextBlock>
+        </DockPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            
-            <TreeView Grid.Column="0" ItemsSource="{Binding Tables}"
-                       SelectedItemChanged="TreeView_SelectedItemChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <DockPanel Grid.Column="0" LastChildFill="True">
+                <Grid DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" x:Name="DownloadSelectedAllButton" Content="Скачать выбранные архивы c приказами" Click="DownloadSelectedAllButton_Click"  Height="50"  Margin="5" />
+                    <Button Grid.Column="1" x:Name="DownloadSelectedFileButton" Content="Без приказов" Click="DownloadSelectedFileButton_Click"  Height="50" Margin="0,5,5,5"/>
+                </Grid>
                 
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Groups}">
-                        <StackPanel Orientation="Horizontal" >
-                            <CheckBox Margin="3" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}"/>
-                        </StackPanel>
-                        
-                        <HierarchicalDataTemplate.ItemTemplate>
-                            
-                            <HierarchicalDataTemplate ItemsSource="{Binding Path=Schemes}">
-                                <StackPanel Orientation="Horizontal" >
-                                    <CheckBox Margin="3" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                    <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}"/>
-                                </StackPanel>
-                                <HierarchicalDataTemplate.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <CheckBox Margin="3" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                            <TextBlock Text="{Binding Scheme.Name}" ToolTip="{Binding Scheme.Name}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </HierarchicalDataTemplate.ItemTemplate>
-                            </HierarchicalDataTemplate>
-                        </HierarchicalDataTemplate.ItemTemplate>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
+                <TreeView DockPanel.Dock="Top" ItemsSource="{Binding Tables}"
+                       SelectedItemChanged="TreeView_SelectedItemChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Path=Groups}">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Margin="3" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"/>
+                                <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" Background="{Binding Background}"/>
+                            </StackPanel>
+
+                            <HierarchicalDataTemplate.ItemTemplate>
+
+                                <HierarchicalDataTemplate ItemsSource="{Binding Path=Schemes}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Margin="3" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"/>
+                                        <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" Background="{Binding Background}"/>
+                                    </StackPanel>
+                                    <HierarchicalDataTemplate.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <CheckBox Margin="3" IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"/>
+                                                <TextBlock Text="{Binding Scheme.Name}" ToolTip="{Binding Scheme.Name}" Background="{Binding Background}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </HierarchicalDataTemplate.ItemTemplate>
+                                </HierarchicalDataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </DockPanel>
+          
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3"
         HorizontalAlignment="Center" VerticalAlignment="Stretch" />
-            <DockPanel Grid.Column="2" LastChildFill="False">
-                <StackPanel  DockPanel.Dock="Top" Orientation="Vertical" DataContext="{Binding SelectedScheme}">
-                    <TextBlock Text="{Binding Scheme.Num}"  TextWrapping="Wrap" TextAlignment="Center" FontSize="20" Background="BlanchedAlmond"/>
-                    <TextBlock Text="{Binding Scheme.Name}" TextWrapping="Wrap" FontStyle="Italic" TextAlignment="Justify" FontSize="18" Background="AliceBlue"/>
-                    <TextBlock Text="{Binding Scheme.NameInfo}" TextWrapping="Wrap" TextAlignment="Center"/>
-                    <TextBlock Text="ИЗМЕНЕНИЙ НЕТ" TextWrapping="Wrap" TextAlignment="Center"/>
-                </StackPanel>
-                <Grid DockPanel.Dock="Bottom" Height="50">
+            <DockPanel Grid.Column="2" LastChildFill="True" Visibility="{Binding SchemeSelectVis}">
+                <Grid DockPanel.Dock="Bottom" Height="50" Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Content="Открыть папку"/>
-                    <Button Grid.Column="1" Content="Скачать архив"/>
-                    <Button Grid.Column="2" Content="Скачать приказ"/>
+                    <Button Grid.Column="0" Content="Открыть папку схемы" Command="{Binding OpenFolderCommand}"/>
+                    <Button Grid.Column="1" Margin="5,0,0,0" Command="{Binding DownloadFileCommand}"
+                            Content="{Binding SelectedScheme.FileDownloadText}" 
+                            IsEnabled="{Binding SelectedScheme.FileDownloadEnabled}"/>
+                    <Button Grid.Column="2" Margin="5,0,0,0" Command="{Binding DownloadOrderCommand}"
+                            Content="{Binding SelectedScheme.OrderDownloadText}" 
+                            IsEnabled="{Binding SelectedScheme.OrderDownloadEnabled}"/>
                 </Grid>
+                <StackPanel DockPanel.Dock="Top" DataContext="{Binding SelectedScheme}">
+
+                    <TextBlock Text="{Binding Scheme.Num}" TextWrapping="Wrap" TextAlignment="Center" FontSize="20" Background="BlanchedAlmond"/>
+                    <TextBlock Text="{Binding Scheme.NameInfo}" TextAlignment="Center" FontSize="20" Background="AliceBlue"/>
+                    <TextBlock Text="{Binding Scheme.Name}" TextWrapping="Wrap" FontStyle="Italic" TextAlignment="Justify" FontSize="18" Background="AliceBlue"/>
+                    <StackPanel Orientation="Vertical" Visibility="{Binding Differences.ChangedVis}">
+                        <TextBlock Text="НОВАЯ СХЕМА" TextAlignment="Center" Background="LawnGreen" Visibility="{Binding Differences.NewScheme}"/>
+                        <TextBlock Text="CХЕМА УДАЛЕНА" TextAlignment="Center" Background="OrangeRed" Visibility="{Binding Differences.DeleteScheme}"/>
+                        <TextBlock Text="ИЗМЕНЕНА ПОДПИСЬ ПРОЕКТ ДОКУМЕНТА" TextAlignment="Center" Background="Yellow" Visibility="{Binding Differences.DifferentNameInfo}"/>
+                        <TextBlock Text="ИЗМЕНЕНЫ ССЫЛКИ НА СКАЧИВАНИЕ СХЕМЫ" TextAlignment="Center" Background="Aquamarine" Visibility="{Binding Differences.DifferentFileLink}"/>
+                        <TextBlock Text="ИЗМЕНЕНЫ ССЫЛКИ НА СКАЧИВАНИЕ ПРИКАЗА" TextAlignment="Center" Background="Beige" Visibility="{Binding Differences.DifferentOrderLink}"/>
+                    </StackPanel>
+                </StackPanel>
+               
             </DockPanel>
             
         </Grid>

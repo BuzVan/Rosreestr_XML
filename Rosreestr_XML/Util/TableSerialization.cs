@@ -13,6 +13,7 @@ namespace Rosreestr_XML.Serialization
     {
         public static void Serialize(string filename, TableXML[] data)
         {
+            File.Delete(filename);
             XmlSerializer formatter = new XmlSerializer(typeof(TableXML[]));
             using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
             {

@@ -51,8 +51,10 @@ namespace Rosreestr_XML.Parsing.AngleSharp
                             var docGr = item.QuerySelector("b");
                             if (docGr != null)
                             {
-                                GroupXML group = new GroupXML();
-                                group.NameGroup = docGr.TextContent.Trim();
+                                GroupXML group = new GroupXML
+                                {
+                                    NameGroup = docGr.TextContent.Trim()
+                                };
                                 table.Groups.Add(group);
                             }
                         }
@@ -109,7 +111,13 @@ namespace Rosreestr_XML.Parsing.AngleSharp
             if (docLinks.Length > 0)
             {
                 for (int i = 0; i < docLinks.Length; i++)
-                    scheme.OrderLink.Add_NotEq(BaseAddr + docLinks[i].GetAttribute("href").Trim());
+                {
+                    string link = docLinks[i].GetAttribute("href").Trim();
+                    if (!link.StartsWith("http"))
+                        link = BaseAddr + link;
+                    scheme.OrderLink.Add_NotEq(link);
+                }
+                    
 
             }
             else
@@ -122,7 +130,13 @@ namespace Rosreestr_XML.Parsing.AngleSharp
         {
             var docLink = docFile.QuerySelector("a");
             if (docLink != null)
-                scheme.FileLink.Add_NotEq(BaseAddr + docLink.GetAttribute("href").Trim());
+            {
+                string link = docLink.GetAttribute("href").Trim();
+                if (!link.StartsWith("http"))
+                    link = BaseAddr + link;
+                scheme.FileLink.Add_NotEq(link);
+            }
+                
         }
 
         //выделение наименования
@@ -145,13 +159,17 @@ namespace Rosreestr_XML.Parsing.AngleSharp
             }
 
             //нет ссылки в первом ребёнке => это Name_Info
-            else if (child != null && child.QuerySelector("a") == null)
+            else if (child != null && !child.IsLink() && child.QuerySelector("a") == null)
             {
                 scheme.NameInfo = RemoveAllTrim(child.TextContent);
                 //ссылка это имя
 
                 scheme.Name = RemoveAllTrim(docLink.TextContent);
-                scheme.FileLink.Add_NotEq(BaseAddr + docLink.GetAttribute("href").Trim());
+                string link = docLink.GetAttribute("href").Trim();
+                if (!link.StartsWith("http"))
+                    link = BaseAddr + link;
+                scheme.FileLink.Add_NotEq(link);
+
 
 
             }
@@ -159,7 +177,10 @@ namespace Rosreestr_XML.Parsing.AngleSharp
             else
             {
                 scheme.Name = RemoveAllTrim(docName.TextContent);
-                scheme.FileLink.Add_NotEq(BaseAddr + docLink.GetAttribute("href").Trim());
+                string link = docLink.GetAttribute("href").Trim();
+                if (!link.StartsWith("http"))
+                    link = BaseAddr + link;
+                scheme.FileLink.Add_NotEq(link);
             }
         }
 

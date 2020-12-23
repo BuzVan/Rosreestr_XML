@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Rosreestr_XML.Data
 {
+
     [Serializable]
     public class TableXML
     {
@@ -42,7 +43,6 @@ namespace Rosreestr_XML.Data
         {
             return string.Format("Table {0}: {1}", NameTable, Groups.Count); 
         }
-
 
     }
 }

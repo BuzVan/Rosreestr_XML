@@ -3,6 +3,7 @@ using AngleSharp.Html.Parser;
 using Rosreestr_XML.Data;
 using Rosreestr_XML.Parsing.AngleSharp;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Rosreestr_XML.Parsing
 {
@@ -18,11 +19,21 @@ namespace Rosreestr_XML.Parsing
         }
         public TableXML[] Parse()
         {
-            string data = htmlLoader.DownloadAsync().Result;
-            HtmlParser htmlParser = new HtmlParser();
-            IHtmlDocument document = htmlParser.ParseDocument(data);
+            try
+            {
+                string data = htmlLoader.DownloadAsync().Result;
+                HtmlParser htmlParser = new HtmlParser();
+                IHtmlDocument document = htmlParser.ParseDocument(data);
+                return angleSharpParser.Parse(document);
+            }
+            catch (System.Exception e)
+            {
+                MessageBox.Show(e.Message +" \n"+e.StackTrace, "Произошла ошибка при скачивании информации с сайта", MessageBoxButton.OK, MessageBoxImage.Error);
+                return new TableXML[0];
+            }
+           
 
-            return angleSharpParser.Parse(document);
+            
         }
 
         public async Task<TableXML[]> ParseAsync()
