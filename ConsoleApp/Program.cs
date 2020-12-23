@@ -10,8 +10,7 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
             Parser taskParser = new Parser();
-            Task<TableXML[]> task = taskParser.ParseAsync();
-            TableXML[] res = task.Result;
+            TableXML[] res = taskParser.Parse();
             Display(res);
             Console.ReadKey();
         }

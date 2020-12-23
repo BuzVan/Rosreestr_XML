@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rosreestr_XML", "Rosreestr_XML\Rosreestr_XML.csproj", "{FEC16A90-E0F8-437D-80CF-ADC5D1A7DE3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{6B53FEBE-64D6-4FFB-8F82-2E1D26B49DAA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{FEC16A90-E0F8-437D-80CF-ADC5D1A7DE3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEC16A90-E0F8-437D-80CF-ADC5D1A7DE3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEC16A90-E0F8-437D-80CF-ADC5D1A7DE3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6B53FEBE-64D6-4FFB-8F82-2E1D26B49DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B53FEBE-64D6-4FFB-8F82-2E1D26B49DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B53FEBE-64D6-4FFB-8F82-2E1D26B49DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B53FEBE-64D6-4FFB-8F82-2E1D26B49DAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
