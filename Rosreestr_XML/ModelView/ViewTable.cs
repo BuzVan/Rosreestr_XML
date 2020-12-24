@@ -146,6 +146,7 @@ namespace Rosreestr_XML.ModelView
         /// <param name="differences"></param>
         internal void SelectDifference(DifferenceType[] differences)
         {
+            if (differences.Length == 0) return;
             if (differences[0] == DifferenceType.Same || differences[0] == DifferenceType.NotSame)
                 return;
             differenceTypes.AddRange(differences);

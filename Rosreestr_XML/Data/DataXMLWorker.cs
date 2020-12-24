@@ -70,6 +70,8 @@ namespace Rosreestr_XML.Data
             DifferenceType[] differences;
 
             //поиск новых и изменённых схем
+            DifferenceType[] arrNew = new DifferenceType[] { DifferenceType.NewScheme };
+            DifferenceType[] arrDel = new DifferenceType[] { DifferenceType.DeleteScheme };
             foreach (ViewTable new_t in new_data)
             {
                 TableXML curTable = null;
@@ -82,7 +84,10 @@ namespace Rosreestr_XML.Data
                         
                 if (curTable == null)
                 {
-                    new_t.SelectDifference(new DifferenceType[] { DifferenceType.NewScheme });
+                    foreach (var new_gr in new_t.Groups)
+                        foreach (var item in new_gr.Schemes)
+                            item.SelectDifference(arrNew);
+                        
                     continue;
                 }
 
@@ -98,7 +103,8 @@ namespace Rosreestr_XML.Data
                            
                     if (curGroup == null)
                     {
-                        new_gr.SelectDifference(new DifferenceType[] { DifferenceType.NewScheme });
+                        foreach (var item in new_gr.Schemes)
+                            item.SelectDifference(arrNew);
                         continue;
                     }
 
@@ -142,7 +148,9 @@ namespace Rosreestr_XML.Data
                 if (curTable == null)
                 {
                     curTable = new ViewTable(old_t);
-                    curTable.SelectDifference(new DifferenceType[] { DifferenceType.DeleteScheme });
+                    foreach (var curGroup in curTable.Groups)
+                        foreach (var item in curGroup.Schemes)
+                            item.SelectDifference(arrDel);
                     new_data.Add(curTable);
                     continue;
                 }
@@ -160,7 +168,8 @@ namespace Rosreestr_XML.Data
                     if (curGroup == null)
                     {
                         curGroup = new ViewGroup(curTable, old_gr);
-                        curGroup.SelectDifference(new DifferenceType[] { DifferenceType.DeleteScheme });
+                        foreach (var item in curGroup.Schemes)
+                            item.SelectDifference(arrDel);
                         curTable.Groups.Add(curGroup);
                         continue;
                     }

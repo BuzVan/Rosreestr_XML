@@ -137,11 +137,11 @@ namespace Rosreestr_XML.ModelView
         /// <returns></returns>
         public async Task SelectDifferentAsync()
         {
-            InfoPanel = "Поиск обновлений на сайте...";
             var data = await dataWorker.DownloadAndSelectDifferentAsync();
             if (data.Any(x => x.IsChanged))
             {
                 System.Windows.MessageBox.Show("На сайте найдены изменения схем. Таблица обновится до новой версии. Изменённые схемы будут выделены цветом в списке до перезапуска программы");
+                InfoPanel = "Найдены изменения";
                 SetTables(data);
             }
             else

@@ -56,10 +56,5 @@ namespace Rosreestr_XML
             DownloadSelectedFileButton.IsEnabled = true;
             DownloadSelectedAllButton.IsEnabled = true;
         }
-
-        private void OpenFolderButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

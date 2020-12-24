@@ -1,10 +1,6 @@
 ﻿using Rosreestr_XML.Data;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Rosreestr_XML.Serialization
